@@ -1,5 +1,5 @@
-import { Home } from 'component/home';
-import { Page1 } from 'component/page1';
+import { Home } from 'container/home';
+import { Page1 } from 'container/home/page1';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
