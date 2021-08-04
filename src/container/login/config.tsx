@@ -2,10 +2,7 @@ import { FormItemType, LoginForm } from './login';
 import React from 'react';
 import { CloseCircleFilled, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { RegisterFrom } from './register';
-import { Input } from 'antd';
-import { checkUserNameApi } from 'api/user-api';
-import { debounce } from 'lodash';
-import { IMenuItem } from '@types/basic';
+import { IMenuItem } from 'types/basic';
 
 export enum LOGIN_TAB_KEY {
   login = 'login',
@@ -30,7 +27,7 @@ LOGIN_MENU.forEach((d) => {
   menuMap.set(d.key, d);
 });
 
-export const LOGIN_MENU_MAP = menuMap;
+export const LOGIN_MENU_MAP = menuMap as any;
 
 export const FormMap = [
   {
@@ -75,44 +72,15 @@ export const FormMap = [
   },
 ];
 
-// 用户校验
-const UserNameCheck = (props) => {
-  const onChange = (e: React.ChangeEvent<{ value: string }>) => {
-    checkUserNameRepeat(e.target.value);
-  };
-
-  const checkUserNameRepeat = debounce(async (value) => {
-    await checkUserNameApi(value)
-      .then(() => {
-        props?.onChange(value);
-      })
-      .catch(() => {
-        props?.onChange('-1');
-      });
-  }, 1000) as any;
-
-  return (
-    <>
-      <Input
-        key={'user-name1'}
-        placeholder={'6-20个字符，支持英文字母、数字、标点符号（除空格）'}
-        prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-        onChange={onChange}
-      />
-    </>
-  );
-};
-
 export const RegisterFormMap = [
   {
     key: 'userName',
     label: '用户账号',
-    type: FormItemType.custom,
-    customFormItem: <UserNameCheck />,
+    type: FormItemType.input,
     rules: [
       {
         required: true,
-        validator: (rule: any, value: string) => {
+        validator: (_rule: any, value: string) => {
           let flat_5_50 = value && value.length > 4 && value.length <= 50;
           const reg = /^[0-9a-zA-Z_]{1,}$/;
           if (value === '-1') {
@@ -135,7 +103,7 @@ export const RegisterFormMap = [
       {
         required: true,
         message: '密码设置不符合要求',
-        validator: (rule: any, value: string) => {
+        validator: (_rule: any, value: string) => {
           let flat_6_20 = value && value.length > 5 && value.length <= 20;
           const reg = /^[a-zA-Z0-9\_-]*$/;
           if (flat_6_20 && reg.test(value)) {
@@ -160,7 +128,7 @@ export const RegisterFormMap = [
         required: true,
         message: '两次密码不统一',
       },
-      ({ getFieldValue }) => ({
+      ({ getFieldValue }: any) => ({
         validator(_: any, value: any) {
           if (!value || getFieldValue('password') === value) {
             return Promise.resolve();
@@ -181,7 +149,7 @@ export const RegisterFormMap = [
     rules: [
       {
         required: false,
-        validator: (rule: any, value: string) => {
+        validator: (_rule: any, value: string) => {
           if (!value) {
             return Promise.resolve();
           }
@@ -208,7 +176,7 @@ export const RegisterFormMap = [
     rules: [
       {
         required: false,
-        validator: (rule: any, value: string) => {
+        validator: (_rule: any, value: string) => {
           if (!value) {
             return Promise.resolve();
           }
@@ -232,7 +200,7 @@ export const RegisterFormMap = [
     rules: [
       {
         required: false,
-        validator: (rule: any, value: string) => {
+        validator: (_rule: any, value: string) => {
           if (!value) {
             return Promise.resolve();
           }

@@ -1,7 +1,7 @@
-import { Tag } from "antd";
-import React from "react";
-import { Link } from "react-router-dom";
-import "./index.less"
+import { Tag } from 'antd';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './index.less';
 
 export const Home = () => {
   const hrefList = [
@@ -10,9 +10,9 @@ export const Home = () => {
       name: '页面1',
     },
     {
-      href: '/page2',
-      name: '页面2',
-    }
+      href: '/login',
+      name: 'login',
+    },
   ];
 
   const getColor = () => {
@@ -31,6 +31,6 @@ export const Home = () => {
           </Link>
         );
       })}
-    </ div>
+    </div>
   );
-}
+};

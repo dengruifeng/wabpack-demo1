@@ -13,6 +13,7 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -26,6 +27,18 @@ module.exports = {
         // style-loader从 JS 中创建样式节点 css-loader转化 CSS 为 CommonJS  less-loader编译 Less 为 CSS
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
       },
+      {
+        // webpack5自带资源模块 asset/resource => file-loader asset/inline => url-loader
+        test: /\.png/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[hash][ext][query]',
+        },
+      },
+      {
+        test: /\.svg/,
+        type: 'asset/inline',
+      },
     ],
   },
   plugins: [
@@ -38,8 +51,10 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      types: path.resolve(__dirname, 'src/@types/'),
+      types: path.resolve(__dirname, 'src/types/'),
       component: path.resolve(__dirname, 'src/component/'),
+      container: path.resolve(__dirname, 'src/container/'),
+      api: path.resolve(__dirname, 'src/api/'),
     }, // 别名
     extensions: ['.tsx', '.ts', '.js'], //解析顺序
   },

@@ -1,5 +1,6 @@
 import { Home } from 'container/home';
 import { Page1 } from 'container/home/page1';
+import { Login } from 'container/login';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -12,6 +13,7 @@ const Routers = () => {
         <Switch>
           <Route path="/" exact={true} component={Home} />
           <Route path="/page1" exact={true} component={Page1} />
+          <Route path="/login" exact={true} component={Login} />
           <Route render={() => <Redirect to="/404" />} />
         </Switch>
       </BrowserRouter>
