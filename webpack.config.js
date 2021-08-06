@@ -3,6 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin'); // 显示构建进程
 
 module.exports = {
   mode: isProd ? 'production' : 'development', //模式
@@ -13,7 +14,7 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  devtool: 'source-map',
+  devtool: isProd ? 'none' : 'inline-source-map',
   module: {
     rules: [
       {
@@ -22,14 +23,14 @@ module.exports = {
         include: path.resolve(__dirname, './src'),
       },
       {
-        test: /\.less$/i,
+        test: /\.(css|less)$/i,
         include: path.resolve(__dirname, './src'),
         // style-loader从 JS 中创建样式节点 css-loader转化 CSS 为 CommonJS  less-loader编译 Less 为 CSS
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
+        use: [isProd ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'less-loader'],
       },
       {
         // webpack5自带资源模块 asset/resource => file-loader asset/inline => url-loader
-        test: /\.png/,
+        test: /\.(png|jpeg)$/,
         type: 'asset/resource',
         generator: {
           filename: 'images/[hash][ext][query]',
@@ -48,6 +49,7 @@ module.exports = {
     }),
     !isProd && new webpack.HotModuleReplacementPlugin(),
     new MiniCssExtractPlugin(),
+    new ProgressBarWebpackPlugin(),
   ],
   resolve: {
     alias: {
@@ -55,6 +57,7 @@ module.exports = {
       component: path.resolve(__dirname, 'src/component/'),
       container: path.resolve(__dirname, 'src/container/'),
       api: path.resolve(__dirname, 'src/api/'),
+      assets: path.resolve(__dirname, 'src/assets/'),
     }, // 别名
     extensions: ['.tsx', '.ts', '.js'], //解析顺序
   },
@@ -62,7 +65,7 @@ module.exports = {
     host: '0.0.0.0',
     port: 9000,
     inline: true,
-    open: true,
+    // open: true,
     hot: true,
     historyApiFallback: true,
     headers: {

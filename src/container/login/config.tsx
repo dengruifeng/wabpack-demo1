@@ -1,6 +1,6 @@
 import { FormItemType, LoginForm } from './login';
 import React from 'react';
-import { CloseCircleFilled, LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { RegisterFrom } from './register';
 import { IMenuItem } from 'types/basic';
 
@@ -37,12 +37,7 @@ export const FormMap = [
     rules: [
       {
         required: true,
-        message: (
-          <>
-            <CloseCircleFilled />
-            请输入用户账号
-          </>
-        ),
+        message: '请输入用户账号',
       },
     ],
     attrs: {
@@ -57,12 +52,7 @@ export const FormMap = [
     rules: [
       {
         required: true,
-        message: (
-          <>
-            <CloseCircleFilled />
-            请输入密码
-          </>
-        ),
+        message: '请输入密码',
       },
     ],
     attrs: {
@@ -77,6 +67,9 @@ export const RegisterFormMap = [
     key: 'userName',
     label: '用户账号',
     type: FormItemType.input,
+    attrs: {
+      placeholder: '6-20个字符，支持英文字母、数字',
+    },
     rules: [
       {
         required: true,
@@ -115,7 +108,7 @@ export const RegisterFormMap = [
       },
     ],
     attrs: {
-      placeholder: '6-20个字符，支持英文字母、数字、标点符号（除空格）',
+      placeholder: '6-20个字符，支持英文字母、数字',
       prefix: <LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />,
     },
   },

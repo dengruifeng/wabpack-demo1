@@ -1,17 +1,11 @@
 import React from 'react';
-import { Form, Button, Row, Tooltip, message } from 'antd';
+import { Form, Button, Row, message } from 'antd';
 import { RegisterFormMap } from './config';
 import { renderFormItem } from './login';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { getPublicKey, userRegister } from 'api/login';
 import JSEncrypt from 'jsencrypt';
 
 export const RegisterFrom: React.FC<any> = (props: { fn: (t: string) => any }) => {
-  const [userNameCheckColorlength, setUserNameCheckColorlength] = React.useState('#A8ADBD');
-  const [userNameCheckColorReg, setUserNameCheckColorReg] = React.useState('#A8ADBD');
-  const [userNameCheckRepeat, setUserNameCheckRepeat] = React.useState('#A8ADBD');
-  const [passwordCheckColorlength, setPasswordCheckColorlength] = React.useState('#A8ADBD');
-  const [passwordCheckColorReg, setPCheckColorReg] = React.useState('#A8ADBD');
   const [form] = Form.useForm();
 
   React.useEffect(() => {
@@ -51,114 +45,19 @@ export const RegisterFrom: React.FC<any> = (props: { fn: (t: string) => any }) =
       });
   };
 
-  const renderTip = (key: string) => {
-    let ele = null;
-    if (key === 'userName') {
-      ele = (
-        <>
-          <div>
-            {userNameCheckColorlength !== '#EF645C' ? (
-              <CheckCircleOutlined style={{ color: userNameCheckColorlength }} />
-            ) : (
-              <CloseCircleOutlined style={{ color: userNameCheckColorlength }} />
-            )}
-            &nbsp;长度为5-50个字符
-          </div>
-          <div>
-            {userNameCheckColorReg !== '#EF645C' ? (
-              <CheckCircleOutlined style={{ color: userNameCheckColorReg }} />
-            ) : (
-              <CloseCircleOutlined style={{ color: userNameCheckColorReg }} />
-            )}
-            &nbsp;支持英文字母、数字、下划线
-          </div>
-          <div>
-            {userNameCheckRepeat !== '#EF645C' ? (
-              <CheckCircleOutlined style={{ color: userNameCheckRepeat }} />
-            ) : (
-              <CloseCircleOutlined style={{ color: userNameCheckRepeat }} />
-            )}
-            &nbsp;账号不可重复
-          </div>
-        </>
-      );
-    } else {
-      ele = (
-        <>
-          <div>
-            {passwordCheckColorlength !== '#EF645C' ? (
-              <CheckCircleOutlined style={{ color: passwordCheckColorlength }} />
-            ) : (
-              <CloseCircleOutlined style={{ color: passwordCheckColorlength }} />
-            )}
-            &nbsp;6-20个字符
-          </div>
-          <div>
-            {passwordCheckColorReg !== '#EF645C' ? (
-              <CheckCircleOutlined style={{ color: passwordCheckColorReg }} />
-            ) : (
-              <CloseCircleOutlined style={{ color: passwordCheckColorReg }} />
-            )}
-            &nbsp;英文字母、数字、标点符号（除空格）
-          </div>
-        </>
-      );
-    }
-    return ele;
-  };
-
   const onValuesChange = (value: { [x: string]: any }) => {
     Object.keys(value).forEach((key) => {
       switch (key) {
         case 'userName':
-          checkUserName(value[key]);
+          //
           break;
         case 'password':
-          checkUserPassword(value[key]);
+          //
           break;
         default:
           break;
       }
     });
-  };
-
-  const checkUserName = (value: string) => {
-    if (!value) return;
-    const flat_5_50 = value && value.length > 4 && value.length <= 50;
-    const reg = /^[0-9a-zA-Z_]{1,}$/;
-    const flat = reg.test(value);
-    if (flat_5_50 && userNameCheckColorlength !== '#46D677') {
-      setUserNameCheckColorlength('#46D677');
-    } else if (!flat_5_50 && userNameCheckColorlength !== '#EF645C') {
-      setUserNameCheckColorlength('#EF645C');
-    }
-    if (flat && userNameCheckColorReg !== '#46D677') {
-      setUserNameCheckColorReg('#46D677');
-    } else if (!flat && userNameCheckColorReg !== '#EF645C') {
-      setUserNameCheckColorReg('#EF645C');
-    }
-    if (!(value === '-1') && userNameCheckRepeat !== '#46D677') {
-      setUserNameCheckRepeat('#46D677');
-    } else if (value === '-1' && userNameCheckRepeat !== '#EF645C') {
-      setUserNameCheckRepeat('#EF645C');
-    }
-  };
-
-  const checkUserPassword = (value: string) => {
-    if (!value) return;
-    const flat_6_20 = value && value.length > 5 && value.length <= 20;
-    const reg = /^[a-zA-Z0-9\_-]*$/;
-    const flat = reg.test(value);
-    if (flat_6_20 && passwordCheckColorlength !== '#46D677') {
-      setPasswordCheckColorlength('#46D677');
-    } else if (!flat_6_20 && passwordCheckColorlength !== '#EF645C') {
-      setPasswordCheckColorlength('#EF645C');
-    }
-    if (flat && passwordCheckColorReg !== '#46D677') {
-      setPCheckColorReg('#46D677');
-    } else if (!flat && passwordCheckColorReg !== '#EF645C') {
-      setPCheckColorReg('#EF645C');
-    }
   };
 
   return (
@@ -174,33 +73,11 @@ export const RegisterFrom: React.FC<any> = (props: { fn: (t: string) => any }) =
         {RegisterFormMap.map((formItem) => {
           return (
             <>
-              {formItem.key === 'userName' || formItem.key === 'password' ? (
-                <Tooltip
-                  key={formItem.key}
-                  color="#fff"
-                  overlayClassName="custom-login-style"
-                  placement="right"
-                  title={renderTip(formItem.key)}
-                >
-                  <Row key={formItem.key}>
-                    <Form.Item
-                      key={formItem.key}
-                      name={formItem.key}
-                      label={formItem.label}
-                      rules={formItem.rules}
-                      style={{ width: '100%' }}
-                    >
-                      {renderFormItem(formItem)}
-                    </Form.Item>
-                  </Row>
-                </Tooltip>
-              ) : (
-                <Row key={formItem.key}>
-                  <Form.Item key={formItem.key} name={formItem.key} label={formItem.label} rules={formItem.rules} style={{ width: '100%' }}>
-                    {renderFormItem(formItem)}
-                  </Form.Item>
-                </Row>
-              )}
+              <Row key={formItem.key}>
+                <Form.Item key={formItem.key} name={formItem.key} label={formItem.label} rules={formItem.rules} style={{ width: '100%' }}>
+                  {renderFormItem(formItem)}
+                </Form.Item>
+              </Row>
             </>
           );
         })}
